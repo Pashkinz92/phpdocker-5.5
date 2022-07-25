@@ -18,16 +18,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: nginx-pagespeed
-            folder: nginx-pagespeed
-            arch: [linux/amd64]
-            targets:
-              primary:
-                name: ~
-                tags: phpdockerio/nginx-pagespeed:latest
-              secondary: ~
-              tertiary: ~
-
           - name: php72
             folder: php/7.2
             arch: [linux/amd64, linux/arm64, linux/arm/v7]
@@ -68,24 +58,3 @@ jobs:
           tags: ${{ matrix.targets.primary.tags }}
           target: ${{ matrix.targets.primary.name }}
 
-      - name: Build and push secondary container
-        if: matrix.targets.secondary
-        uses: docker/build-push-action@v2
-        with:
-          context: ${{ matrix.folder }}
-          platforms: ${{ join(matrix.arch, ',') }}
-          push: true
-          pull: true
-          tags: ${{ matrix.targets.secondary.tags }}
-          target: ${{ matrix.targets.secondary.name }}
-
-      - name: Build and push tertiary container
-        if: matrix.targets.tertiary
-        uses: docker/build-push-action@v2
-        with:
-          context: ${{ matrix.folder }}
-          platforms: ${{ join(matrix.arch, ',') }}
-          push: true
-          pull: true
-          tags: ${{ matrix.targets.tertiary.tags }}
-          target: ${{ matrix.targets.tertiary.name }}
